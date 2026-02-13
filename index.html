@@ -2,214 +2,206 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Encuesta Cripto</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #FF6600; /* Naranja Bitcoin */
-            --primary-light: #fff0e5;
-            --text: #333;
-            --gray: #888;
-            --bg: #fafafa;
+            --primary: #FF6600; /* Naranja Bitcoin Puro */
+            --primary-dark: #e55c00;
+            --primary-light: #fff5eb;
+            --accent: #FF8800;
+            --text: #222;
+            --gray: #666;
+            --bg-gradient: linear-gradient(135deg, #fff8f2 0%, #ffffff 100%);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
+            background: var(--bg-gradient);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             color: var(--text);
+            padding: 10px; /* Pequeño margen en móvil */
         }
 
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 550px;
             background: white;
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(255, 102, 0, 0.1); /* Sombra naranja suave */
             position: relative;
             overflow: hidden;
-            min-height: 500px;
+            min-height: 550px; /* Altura fija para evitar saltos */
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(255, 102, 0, 0.1);
         }
 
-        /* Barra de Progreso */
+        /* Barra de Progreso Naranja */
         .progress-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 6px;
-            background: #eee;
+            height: 8px;
+            background: #f0f0f0;
         }
         .progress-bar {
             height: 100%;
-            background: var(--primary);
+            background: linear-gradient(90deg, var(--primary), var(--accent));
             width: 0%;
-            transition: width 0.4s ease;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Slides (Pasos) */
         .step {
-            display: none; /* Ocultos por defecto */
+            display: none;
             flex-direction: column;
             justify-content: center;
             flex-grow: 1;
-            animation: fadeIn 0.5s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
         }
         .step.active {
             display: flex;
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* Títulos */
+        h1 { margin: 0; color: var(--primary); font-size: 50px; line-height: 1; margin-bottom: 20px;}
+        h2 { font-size: 26px; margin: 0 0 10px 0; color: #111; font-weight: 800; letter-spacing: -0.5px; }
+        .desc { font-size: 17px; color: var(--gray); margin-bottom: 30px; line-height: 1.5; }
 
-        h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #1a1a1a;
-        }
+        /* Tarjetas de Selección (Radio Buttons) */
+        .options-grid { display: grid; gap: 12px; }
         
-        .desc {
-            font-size: 16px;
-            color: var(--gray);
-            margin-bottom: 30px;
-        }
-
-        /* Inputs y Opciones Estilo Tarjeta */
-        .options-grid {
-            display: grid;
-            gap: 15px;
-        }
-
         .radio-card {
             display: flex;
             align-items: center;
-            padding: 15px 20px;
-            border: 2px solid #eee;
-            border-radius: 12px;
+            padding: 16px 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 16px;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-weight: 500;
+            font-weight: 600;
+            color: #444;
+            background: white;
         }
 
-        .radio-card:hover {
-            border-color: var(--primary);
-            background-color: var(--primary-light);
-        }
+        .radio-card:hover { border-color: #ffd1b3; background: #fffcf9; }
 
-        /* Ocultar el radio button real */
-        input[type="radio"] {
-            display: none;
-        }
+        /* Input Oculto */
+        input[type="radio"] { display: none; }
 
-        /* Estilo cuando está seleccionado */
+        /* ESTADO SELECCIONADO (Naranja fuerte) */
         input[type="radio"]:checked + .radio-card {
             border-color: var(--primary);
             background-color: var(--primary-light);
-            color: var(--primary);
-            box-shadow: 0 4px 12px rgba(255, 102, 0, 0.15);
+            color: var(--primary-dark);
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.2);
+            transform: translateY(-1px);
         }
 
-        /* Inputs de texto */
+        /* Campos de Texto */
         input[type="text"], input[type="email"], textarea {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             border: 2px solid #eee;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 16px;
             font-family: inherit;
             box-sizing: border-box;
             outline: none;
-            transition: border 0.3s;
+            transition: all 0.3s;
+            background: #fafafa;
         }
         input:focus, textarea:focus {
             border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.1);
         }
 
-        /* Navegación */
+        /* Botones */
         .nav-buttons {
             display: flex;
             justify-content: space-between;
             margin-top: auto;
             padding-top: 30px;
+            gap: 15px;
         }
 
         button {
-            padding: 12px 28px;
-            border-radius: 8px;
+            padding: 16px 32px;
+            border-radius: 50px; /* Redondos modernos */
             border: none;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        
-        button:active { transform: scale(0.98); }
+        button:active { transform: scale(0.96); }
 
-        .btn-next {
-            background-color: var(--text);
+        .btn-next, .btn-submit, .btn-start {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
             color: white;
-            margin-left: auto; /* Empuja a la derecha */
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+            flex: 1; /* Ocupa espacio en móvil */
         }
-        .btn-next:hover { background-color: black; }
+        .btn-next:hover, .btn-start:hover { 
+            box-shadow: 0 6px 20px rgba(255, 102, 0, 0.4);
+            transform: translateY(-2px);
+        }
 
         .btn-prev {
-            background-color: white;
+            background-color: transparent;
             color: var(--gray);
-            border: 1px solid #eee;
+            border: 2px solid #eee;
+            padding: 14px 24px;
         }
-        .btn-prev:hover { background-color: #f5f5f5; color: var(--text); }
+        .btn-prev:hover { background-color: #f5f5f5; color: #333; }
 
-        .btn-submit {
-            background-color: var(--primary);
-            color: white;
-            width: 100%;
-        }
-        .btn-submit:hover { background-color: #e65c00; }
-
-        /* Subtitulos dentro de opciones */
-        .group-label {
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--gray);
-            margin: 20px 0 10px 0;
-            font-weight: bold;
-        }
-
-        /* Estrellas */
-        .stars {
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: center;
-            gap: 10px;
-        }
+        /* Estrellas Grandes */
+        .stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 8px; margin: 20px 0; }
         .stars input { display: none; }
-        .stars label {
-            font-size: 40px;
-            color: #ddd;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
+        .stars label { font-size: 45px; color: #eee; cursor: pointer; transition: color 0.2s; }
         .stars input:checked ~ label,
         .stars label:hover,
-        .stars label:hover ~ label {
-            color: #FFD700;
-        }
+        .stars label:hover ~ label { color: #FFD700; filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4)); }
 
-        /* Mensajes de error/exito */
-        .error-msg { color: red; font-size: 14px; margin-top: 10px; display: none; }
-        #success-screen { text-align: center; display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
-        #success-icon { font-size: 60px; color: var(--primary); margin-bottom: 20px; }
+        /* Subtítulos pequeños */
+        .group-label { font-size: 0.8em; text-transform: uppercase; letter-spacing: 1.2px; color: var(--primary); margin: 25px 0 10px 0; font-weight: 800; }
+
+        /* Pantalla Final */
+        #success-screen { text-align: center; display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; animation: fadeIn 0.5s; }
+        #success-icon { font-size: 80px; margin-bottom: 20px; animation: bounce 1s infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+
+        /* --- MÓVIL OPTIMIZADO --- */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 20px; /* Menos padding lateral */
+                border-radius: 15px;
+                min-height: 85vh; /* Ocupa casi toda la pantalla */
+                justify-content: flex-start;
+            }
+            h1 { font-size: 40px; }
+            h2 { font-size: 22px; }
+            .desc { font-size: 15px; margin-bottom: 20px; }
+            .radio-card { padding: 14px 15px; font-size: 15px; }
+            .nav-buttons { flex-direction: column-reverse; gap: 10px; } /* Botones apilados */
+            .btn-prev { width: 100%; border: none; color: #999; padding: 10px; }
+            .btn-next, .btn-submit { width: 100%; padding: 18px; font-size: 18px; }
+            /* Ajuste para listas largas en móvil */
+            .scrollable-list { max-height: 45vh; overflow-y: auto; padding-right: 5px; }
+        }
 
     </style>
 </head>
@@ -221,28 +213,30 @@
     <form name="crypto-survey" id="mainForm">
         
         <div class="step active">
-            <div style="text-align: center;">
-                <h1 style="color: var(--primary); font-size: 40px;">₿</h1>
-                <h2>Encuesta de Experiencia</h2>
-                <p class="desc">Ayúdanos a mejorar en menos de 1 minuto y recibe tu <strong>cupón de 5€</strong>.</p>
-                <button type="button" class="btn-next" onclick="nextStep()">Comenzar →</button>
+            <div style="text-align: center; margin-top: 40px;">
+                <h1>₿</h1>
+                <h2>Encuesta Cripto</h2>
+                <p class="desc">Ayúdanos a mejorar la experiencia de pago.<br>Te llevará menos de 1 minuto.</p>
+                <div style="background: var(--primary-light); padding: 15px; border-radius: 12px; margin-bottom: 30px; border: 1px dashed var(--primary);">
+                    <strong style="color: var(--primary-dark);">🎁 Recompensa:</strong> Cupón de 5€ al finalizar.
+                </div>
+                <button type="button" class="btn-start" onclick="startSurvey()">COMENZAR AHORA</button>
             </div>
         </div>
 
         <div class="step">
             <h2>1. ¿Cómo pagaste?</h2>
-            <p class="desc">Selecciona el método que usaste.</p>
+            <p class="desc">Selecciona la opción exacta.</p>
             <div class="options-grid">
                 <label>
                     <input type="radio" name="MetodoPago" value="Metamask (Web3)" required onclick="autoAdvance()">
-                    <div class="radio-card">🦊 Botón Metamask (Web3 Directo)</div>
+                    <div class="radio-card">🦊 Botón Metamask (Web3)</div>
                 </label>
                 <label>
                     <input type="radio" name="MetodoPago" value="Pasarela Estándar/QR" onclick="autoAdvance()">
-                    <div class="radio-card">💳 Pasarela Cripto / Código QR</div>
+                    <div class="radio-card">💳 Pasarela / Código QR</div>
                 </label>
             </div>
-            <div class="error-msg">Por favor selecciona una opción.</div>
             <div class="nav-buttons">
                 <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
                 <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
@@ -251,20 +245,20 @@
 
         <div class="step">
             <h2>2. ¿Qué Red usaste?</h2>
-            <p class="desc">Es importante para saber dónde mejorar.</p>
+            <p class="desc">Para optimizar nuestros nodos.</p>
             
-            <div style="max-height: 300px; overflow-y: auto; padding-right: 5px;">
-                <div class="group-label">Si usaste Pasarela</div>
+            <div class="scrollable-list">
+                <div class="group-label">Pasarela General</div>
                 <div class="options-grid">
                     <label><input type="radio" name="RedCripto" value="Ethereum ERC20"><div class="radio-card">Ethereum (ERC20)</div></label>
                     <label><input type="radio" name="RedCripto" value="Tron TRC20"><div class="radio-card">Tron (TRC20 - USDT)</div></label>
                     <label><input type="radio" name="RedCripto" value="Bitcoin"><div class="radio-card">Bitcoin (BTC)</div></label>
-                    <label><input type="radio" name="RedCripto" value="BSC BEP20"><div class="radio-card">Binance Smart Chain (BNB)</div></label>
+                    <label><input type="radio" name="RedCripto" value="BSC BEP20"><div class="radio-card">BSC (BNB)</div></label>
                     <label><input type="radio" name="RedCripto" value="Polygon"><div class="radio-card">Polygon (MATIC)</div></label>
                     <label><input type="radio" name="RedCripto" value="Solana"><div class="radio-card">Solana (SOL)</div></label>
                 </div>
 
-                <div class="group-label">Si usaste Metamask</div>
+                <div class="group-label">Metamask Directo</div>
                 <div class="options-grid">
                     <label><input type="radio" name="RedCripto" value="Metamask Ethereum"><div class="radio-card">Ethereum Mainnet</div></label>
                     <label><input type="radio" name="RedCripto" value="Metamask BSC"><div class="radio-card">BSC Mainnet</div></label>
@@ -280,8 +274,8 @@
         <div class="step">
             <h2>3. Tu Dispositivo</h2>
             <div class="options-grid">
-                <label><input type="radio" name="Dispositivo" value="Desktop Extension" onclick="autoAdvance()"><div class="radio-card">💻 PC + Extensión Navegador</div></label>
-                <label><input type="radio" name="Dispositivo" value="Desktop QR Movil" onclick="autoAdvance()"><div class="radio-card">📱 PC + Escáner QR con Móvil</div></label>
+                <label><input type="radio" name="Dispositivo" value="Desktop Extension" onclick="autoAdvance()"><div class="radio-card">💻 PC + Extensión</div></label>
+                <label><input type="radio" name="Dispositivo" value="Desktop QR Movil" onclick="autoAdvance()"><div class="radio-card">📱 PC + QR con Móvil</div></label>
                 <label><input type="radio" name="Dispositivo" value="Movil App" onclick="autoAdvance()"><div class="radio-card">📲 Móvil (App Wallet)</div></label>
             </div>
             <div class="nav-buttons">
@@ -291,8 +285,8 @@
         </div>
 
         <div class="step">
-            <h2>4. ¿Qué tan fácil fue?</h2>
-            <p class="desc">Del 1 (Difícil) al 5 (Muy fácil)</p>
+            <h2>4. ¿Fue fácil?</h2>
+            <p class="desc">Valora la experiencia de pago.</p>
             
             <div class="stars">
                 <input type="radio" id="s5" name="Puntuacion" value="5" onclick="autoAdvanceDelay()"><label for="s5">★</label>
@@ -309,12 +303,12 @@
         </div>
 
         <div class="step">
-            <h2>5. Comparado con otros...</h2>
+            <h2>5. Comparación</h2>
             <div class="options-grid">
-                <label><input type="radio" name="Comparacion" value="Mejor aqui" onclick="autoAdvance()"><div class="radio-card">🏆 Sois los mejores / Más fácil</div></label>
-                <label><input type="radio" name="Comparacion" value="Igual" onclick="autoAdvance()"><div class="radio-card">😐 Igual que el resto</div></label>
-                <label><input type="radio" name="Comparacion" value="Peor" onclick="autoAdvance()"><div class="radio-card">👎 Peor / Más complicado</div></label>
-                <label><input type="radio" name="Comparacion" value="Primera vez" onclick="autoAdvance()"><div class="radio-card">🆕 Es mi primera vez con cripto</div></label>
+                <label><input type="radio" name="Comparacion" value="Mejor aqui" onclick="autoAdvance()"><div class="radio-card">🏆 Mejor que otros sitios</div></label>
+                <label><input type="radio" name="Comparacion" value="Igual" onclick="autoAdvance()"><div class="radio-card">😐 Igual / Estándar</div></label>
+                <label><input type="radio" name="Comparacion" value="Peor" onclick="autoAdvance()"><div class="radio-card">👎 Peor / Complicado</div></label>
+                <label><input type="radio" name="Comparacion" value="Primera vez" onclick="autoAdvance()"><div class="radio-card">🆕 Es mi primera vez</div></label>
             </div>
             <div class="nav-buttons">
                 <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
@@ -323,19 +317,20 @@
         </div>
 
         <div class="step">
-            <h2>6. Preferencias y Mejoras</h2>
-            <p class="desc">¿Qué moneda prefieres gastar?</p>
+            <h2>6. Preferencias</h2>
+            <p class="desc">Tus ideas nos ayudan mucho.</p>
+            
+            <div class="group-label">Preferencia Futura</div>
             <div class="options-grid" style="margin-bottom: 20px;">
-                <label><input type="radio" name="PreferenciaFutura" value="Estables"><div class="radio-card">Estables (USDT, USDC...)</div></label>
+                <label><input type="radio" name="PreferenciaFutura" value="Estables"><div class="radio-card">Monedas Estables (USDT...)</div></label>
                 <label><input type="radio" name="PreferenciaFutura" value="Volatiles"><div class="radio-card">Volátiles (BTC, ETH...)</div></label>
             </div>
 
-            <label>¿Falta alguna red?</label>
-            <input type="text" name="SugerenciaRed" placeholder="Ej: Base, Lightning Network...">
+            <div class="group-label">¿Falta alguna Red?</div>
+            <input type="text" name="SugerenciaRed" placeholder="Ej: Lightning Network...">
             
-            <br><br>
-            <label>¿Qué podemos mejorar?</label>
-            <textarea name="Mejoras" rows="2" placeholder="Tus sugerencias..."></textarea>
+            <div class="group-label">Sugerencias de mejora</div>
+            <textarea name="Mejoras" rows="2" placeholder="Cuéntanos..."></textarea>
 
             <div class="nav-buttons">
                 <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
@@ -345,7 +340,7 @@
 
         <div class="step">
             <h2>¡Último paso!</h2>
-            <p class="desc">Déjanos tu email para enviarte el cupón de 5€.</p>
+            <p class="desc">Introduce tu email para enviarte el cupón.</p>
             
             <input type="email" name="Email" id="inputEmail" placeholder="nombre@ejemplo.com" required>
             
@@ -362,16 +357,16 @@
     <div id="success-screen">
         <div id="success-icon">✅</div>
         <h2>¡Recibido!</h2>
-        <p>Tus respuestas se han guardado correctamente.</p>
-        <p>Revisa tu correo pronto para ver tu cupón.</p>
-        <button onclick="location.reload()" style="margin-top:20px; background: #eee; color: #333;">Volver a inicio</button>
+        <p>Gracias por tu tiempo.</p>
+        <p>Revisa tu correo para ver tu cupón.</p>
+        <button onclick="location.reload()" style="margin-top:30px; background: #eee; color: #333; padding: 15px 30px;">Volver</button>
     </div>
 
 </div>
 
 <script>
     // -----------------------------------------------------------------------
-    // PEGA AQUÍ ABAJO LA URL DE TU SCRIPT DE GOOGLE
+    // ¡¡IMPORTANTE!! PEGA TU URL DE GOOGLE APPS SCRIPT AQUÍ ABAJO:
     const scriptURL = https://script.google.com/a/macros/unas-holding.org/s/AKfycbw1hnZZrLd710BeOJXd__vXXc5ryIoO-6NX8MAsYSA95jCQGtpbFs_yQHw-DO_FtphuEw/exec
     // -----------------------------------------------------------------------
 
@@ -379,31 +374,69 @@
     const steps = document.querySelectorAll('.step');
     const progressBar = document.getElementById('progress');
 
+    // Función segura para mostrar pasos
     function showStep(n) {
-        // Reset
-        steps.forEach(s => s.classList.remove('active'));
-        // Show current
-        steps[n].classList.add('active');
-        // Update Progress
-        const progress = ((n) / (steps.length - 1)) * 100;
+        steps.forEach(s => {
+            s.classList.remove('active');
+            // Quitamos display flex para que la animación funcione bien
+            setTimeout(() => {
+                if(!s.classList.contains('active')) s.style.display = 'none';
+            }, 400); 
+        });
+        
+        const target = steps[n];
+        target.style.display = 'flex';
+        // Pequeño timeout para permitir que el navegador procese el cambio de display antes de la opacidad
+        setTimeout(() => {
+            target.classList.add('active');
+        }, 10);
+
+        // Barra de progreso
+        const progress = (n / (steps.length - 1)) * 100;
         progressBar.style.width = progress + '%';
+        
+        // Scroll arriba en móvil
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // NUEVA FUNCIÓN SOLO PARA EL BOTÓN DE INICIO
+    function startSurvey() {
+        // Simplemente avanza al paso 1 sin validar nada
+        currentStep = 1;
+        showStep(currentStep);
     }
 
     function nextStep() {
-        // Validación simple (opcional: añadir validación más estricta si se desea)
+        // Validar inputs requeridos en el paso actual
         const inputs = steps[currentStep].querySelectorAll('input[required]');
         let valid = true;
-        inputs.forEach(input => {
-            if (!input.checkValidity()) {
-                valid = false;
-                input.reportValidity();
-            }
-        });
+        
+        // Si hay inputs requeridos, verificar si están llenos
+        if (inputs.length > 0) {
+            // Truco: checkValidity en radio buttons a veces falla si no se itera uno por uno
+            let radioGroups = {};
+            inputs.forEach(input => {
+                if (input.type === 'radio') {
+                    radioGroups[input.name] = true;
+                } else {
+                    if (!input.checkValidity()) {
+                        valid = false;
+                        input.reportValidity();
+                    }
+                }
+            });
 
-        // Caso especial para grupos de radio buttons requeridos
-        // (El navegador a veces no valida radio groups ocultos correctamente, 
-        // pero como están visibles, checkValidity suele funcionar. 
-        // Si no, forzamos validación visual).
+            // Verificar grupos de radio
+            for (let name in radioGroups) {
+                const radios = steps[currentStep].querySelectorAll(`input[name="${name}"]`);
+                let oneChecked = false;
+                radios.forEach(r => { if(r.checked) oneChecked = true; });
+                if (!oneChecked) {
+                    valid = false;
+                    alert("Por favor selecciona una opción para continuar.");
+                }
+            }
+        }
 
         if (valid && currentStep < steps.length - 1) {
             currentStep++;
@@ -418,20 +451,21 @@
         }
     }
 
-    // Auto-avanzar cuando seleccionan una opción (Typeform style)
     function autoAdvance() {
-        setTimeout(() => {
-            nextStep();
-        }, 300); // Pequeño delay para que vean la animación de click
+        setTimeout(() => { nextStep(); }, 350);
     }
 
     function autoAdvanceDelay() {
-        setTimeout(() => {
-            nextStep();
-        }, 500); // Un poco más de tiempo para las estrellas
+        setTimeout(() => { nextStep(); }, 600);
     }
 
-    // ENVIO DEL FORMULARIO
+    // Inicializar visualización correcta
+    steps.forEach((s, index) => {
+        if(index === 0) s.style.display = 'flex';
+        else s.style.display = 'none';
+    });
+
+    // Envío de formulario
     const form = document.forms['mainForm'];
     const successScreen = document.getElementById('success-screen');
     const submitBtn = document.querySelector('.btn-submit');
@@ -439,15 +473,12 @@
     form.addEventListener('submit', e => {
         e.preventDefault();
         
-        // Validar email final
         const emailInput = document.getElementById('inputEmail');
-        if(!emailInput.value) {
-            alert("Por favor escribe tu email");
-            return;
-        }
+        if(!emailInput.value) { alert("Escribe tu email"); return; }
 
         submitBtn.disabled = true;
         submitBtn.innerText = "Enviando...";
+        submitBtn.style.opacity = "0.7";
 
         fetch(scriptURL, { method: 'POST', body: new FormData(form)})
             .then(response => {
@@ -456,13 +487,13 @@
                 progressBar.style.width = '100%';
             })
             .catch(error => {
-                alert("Hubo un error. Por favor intenta de nuevo.");
+                alert("Hubo un error al conectar. Inténtalo de nuevo.");
                 submitBtn.disabled = false;
                 submitBtn.innerText = "INTENTAR DE NUEVO";
+                submitBtn.style.opacity = "1";
                 console.error('Error!', error.message);
             });
     });
-
 </script>
 
 </body>
