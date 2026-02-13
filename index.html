@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Encuesta Cripto</title>
+    <title>Encuesta Cripto Detallada</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #FF6600;
+            --primary-light: #fff5eb;
             --primary-dark: #cc5200;
-            --bg-gradient: linear-gradient(135deg, #fff8f2 0%, #ffffff 100%);
-            --text: #222;
+            --text-dark: #1a1a1a;
+            --text-gray: #666;
+            --bg-gradient: linear-gradient(135deg, #fffcf9 0%, #ffffff 100%);
         }
 
         body {
@@ -21,22 +23,22 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            color: var(--text);
+            color: var(--text-dark);
             padding: 15px;
         }
 
         .container {
             width: 100%;
-            max-width: 550px;
+            max-width: 600px;
             background: white;
-            padding: 30px;
+            padding: 30px; /* Padding cómodo */
             border-radius: 24px;
-            box-shadow: 0 15px 40px rgba(255, 102, 0, 0.08);
+            box-shadow: 0 15px 50px rgba(255, 102, 0, 0.08);
             position: relative;
             overflow: hidden;
-            min-height: 500px;
             display: flex;
             flex-direction: column;
+            min-height: 600px; /* Altura para que quepa bien el contenido */
         }
 
         /* BARRA DE PROGRESO */
@@ -52,137 +54,138 @@
             height: 100%;
             background: var(--primary);
             width: 0%;
-            transition: width 0.3s ease;
+            transition: width 0.4s ease;
         }
 
-        /* PASOS (SLIDES) */
+        /* PASOS */
         .step {
-            display: none; /* Oculto por defecto */
+            display: none;
             flex-direction: column;
-            justify-content: center;
             flex-grow: 1;
             opacity: 0;
             animation: fadeIn 0.4s forwards;
+            padding-bottom: 60px; /* Espacio para botones */
         }
-
-        /* CLASE MÁGICA PARA MOSTRAR */
-        .step.active {
-            display: flex; 
-        }
+        .step.active { display: flex; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* TEXTOS */
-        h1 { margin: 0; color: var(--primary); font-size: 48px; line-height: 1; margin-bottom: 15px; text-align: center;}
-        h2 { font-size: 24px; margin: 0 0 10px 0; color: #111; font-weight: 800; }
-        .desc { font-size: 16px; color: #666; margin-bottom: 25px; line-height: 1.5; }
-        .center-text { text-align: center; }
-
-        /* TARJETAS RADIO */
-        .options-grid { display: grid; gap: 10px; }
+        /* TIPOGRAFÍA */
+        h1 { color: var(--primary); margin: 0; font-size: 40px; text-align: center; }
+        h2 { font-size: 22px; margin: 0 0 10px 0; color: var(--text-dark); font-weight: 800; line-height: 1.3; }
+        .desc { font-size: 15px; color: var(--text-gray); margin-bottom: 20px; line-height: 1.5; }
+        
+        /* TARJETAS DE RESPUESTA (MEJORADAS) */
+        .options-grid { display: flex; flex-direction: column; gap: 12px; }
         
         .radio-card {
             display: flex;
-            align-items: center;
-            padding: 15px;
-            border: 2px solid #f4f4f4;
+            flex-direction: column; /* Texto arriba y abajo */
+            padding: 16px;
+            border: 2px solid #f0f0f0;
             border-radius: 12px;
             cursor: pointer;
-            font-weight: 600;
             transition: all 0.2s;
             background: white;
         }
 
+        .card-title { font-weight: 700; color: var(--text-dark); font-size: 16px; margin-bottom: 4px; }
+        .card-subtitle { font-size: 13px; color: var(--text-gray); font-weight: 400; }
+
         input[type="radio"] { display: none; }
+        
+        /* ESTADO SELECCIONADO */
         input[type="radio"]:checked + .radio-card {
             border-color: var(--primary);
-            background-color: #fff5eb;
-            color: var(--primary-dark);
+            background-color: var(--primary-light);
             box-shadow: 0 4px 12px rgba(255, 102, 0, 0.15);
         }
+        input[type="radio"]:checked + .radio-card .card-title { color: var(--primary-dark); }
 
-        /* INPUTS TEXTO */
+        /* SCROLL EN LISTAS LARGAS */
+        .scroll-area {
+            max-height: 320px;
+            overflow-y: auto;
+            padding-right: 5px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee; /* Separador visual */
+        }
+        
+        /* SEPARADORES DE SECCIÓN */
+        .section-header {
+            background: #f9f9f9;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-gray);
+            margin: 15px 0 10px 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* INPUTS DE TEXTO */
         input[type="text"], input[type="email"], textarea {
             width: 100%;
-            padding: 15px;
+            padding: 14px;
             border: 2px solid #eee;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 15px;
             outline: none;
-            box-sizing: border-box; 
+            box-sizing: border-box;
             font-family: inherit;
+            margin-bottom: 10px;
         }
-        input:focus, textarea:focus { border-color: var(--primary); }
+        input:focus, textarea:focus { border-color: var(--primary); background: white; }
 
         /* BOTONES */
         .nav-buttons {
+            margin-top: auto;
             display: flex;
             justify-content: space-between;
-            margin-top: auto;
-            padding-top: 20px;
-            gap: 10px;
+            gap: 15px;
+            background: white;
+            padding-top: 10px;
         }
 
         button {
-            padding: 14px 28px;
+            padding: 14px 24px;
             border-radius: 50px;
             border: none;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             transition: transform 0.1s;
         }
-        button:active { transform: scale(0.95); }
+        button:active { transform: scale(0.96); }
 
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            flex: 1;
-        }
-        .btn-secondary {
-            background: transparent;
-            color: #888;
-            border: 1px solid #eee;
-        }
-
-        /* BOTÓN DE INICIO GIGANTE */
+        .btn-next { background: var(--primary); color: white; flex: 1; box-shadow: 0 4px 10px rgba(255, 102, 0, 0.2); }
+        .btn-prev { background: white; color: var(--text-gray); border: 1px solid #ddd; }
+        
         .btn-start-big {
-            width: 100%;
-            padding: 18px;
-            font-size: 18px;
-            background: linear-gradient(45deg, #FF6600, #ff8533);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
-            margin-top: 20px;
+            width: 100%; padding: 18px; font-size: 18px;
+            background: linear-gradient(135deg, #FF6600, #ff8533);
+            color: white; border: none; border-radius: 16px;
+            margin-top: 20px; box-shadow: 0 8px 20px rgba(255, 102, 0, 0.25);
         }
-        .btn-start-big:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 102, 0, 0.4); }
 
         /* ESTRELLAS */
-        .stars { display: flex; flex-direction: row-reverse; justify-content: flex-start; gap: 5px; margin: 15px 0; }
-        .stars label { font-size: 45px; color: #eee; cursor: pointer; transition: color 0.2s; }
+        .stars-wrapper { text-align: center; margin: 20px 0; }
+        .stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 8px; }
+        .stars label { font-size: 42px; color: #ddd; cursor: pointer; transition: color 0.2s; }
         .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: #FFD700; }
+        .stars-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-gray); margin-top: 5px; padding: 0 20px; }
 
-        /* SCROLLABLE PARA LISTAS LARGAS EN MOVIL */
-        .scrollable { max-height: 300px; overflow-y: auto; }
-        
-        .sub-label { font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 15px 0 5px 0; letter-spacing: 1px; }
-
-        /* PANTALLA EXITO */
-        #success-screen { text-align: center; display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
-        
-        /* ERROR MESSAGE */
-        .error-toast {
-            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-            background: #ff3333; color: white; padding: 10px 20px;
-            border-radius: 30px; font-size: 14px; font-weight: bold;
-            display: none; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        /* Mensajes de Error/Exito */
+        #errorMsg { 
+            position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+            background: #ff3b30; color: white; padding: 8px 16px; border-radius: 20px;
+            font-size: 13px; font-weight: 600; display: none; z-index: 10;
         }
+        #success-screen { display: none; text-align: center; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
 
     </style>
 </head>
@@ -190,180 +193,240 @@
 
 <div class="container">
     <div class="progress-container"><div class="progress-bar" id="progress"></div></div>
-    <div class="error-toast" id="errorMsg">⚠️ Selecciona una opción</div>
+    <div id="errorMsg">⚠️ Por favor selecciona una opción</div>
 
     <form name="crypto-survey" id="mainForm">
         
         <div class="step active" id="step-0">
-            <div class="center-text" style="margin-top: 20px;">
+            <div style="text-align: center; margin-top: 40px;">
                 <h1>₿</h1>
-                <h2>Encuesta Cripto</h2>
-                <p class="desc">Ayúdanos a mejorar la experiencia de pago.<br>Tardarás menos de 1 minuto.</p>
+                <h2 style="font-size: 28px; margin-top: 15px;">Encuesta de Pago</h2>
+                <p class="desc">Ayúdanos a mejorar tu experiencia de compra con criptomonedas.</p>
                 
-                <div style="background: #fff5eb; padding: 15px; border-radius: 10px; border: 1px dashed var(--primary); margin-bottom: 20px;">
-                    <strong style="color: #cc5200;">🎁 Recompensa:</strong> Cupón de 5€ al terminar.
+                <div style="background: #fff8f2; padding: 20px; border-radius: 16px; border: 1px dashed var(--primary); text-align: left;">
+                    <strong style="color: var(--primary-dark); display: block; margin-bottom: 5px;">🎁 Tu Recompensa:</strong>
+                    <span style="font-size: 14px; color: #555;">Completa estas 6 preguntas y recibe un <strong>Cupón de 5€</strong> automáticamente en tu correo.</span>
                 </div>
 
-                <button type="button" class="btn-start-big" onclick="goToStep(1)">COMENZAR AHORA</button>
+                <button type="button" class="btn-start-big" onclick="goToStep(1)">COMENZAR ENCUESTA</button>
             </div>
         </div>
 
         <div class="step">
-            <h2>1. ¿Cómo pagaste?</h2>
-            <p class="desc">Selecciona el método usado.</p>
+            <h2>1. ¿Qué método de pago seleccionaste?</h2>
+            <p class="desc">Queremos saber qué sistema utilizaste en nuestra web.</p>
+            
             <div class="options-grid">
                 <label>
                     <input type="radio" name="MetodoPago" value="Metamask (Web3)" onclick="delayedNext()">
-                    <div class="radio-card">🦊 Metamask (Web3)</div>
+                    <div class="radio-card">
+                        <span class="card-title">🦊 Botón Metamask</span>
+                        <span class="card-subtitle">Se abrió mi cartera automáticamente (Conexión Web3).</span>
+                    </div>
                 </label>
                 <label>
                     <input type="radio" name="MetodoPago" value="Pasarela Estándar/QR" onclick="delayedNext()">
-                    <div class="radio-card">💳 Pasarela / Código QR</div>
+                    <div class="radio-card">
+                        <span class="card-title">💳 Botón "Pague con Cripto"</span>
+                        <span class="card-subtitle">Me salió un código QR o una dirección para enviar el dinero (Pasarela estándar).</span>
+                    </div>
                 </label>
             </div>
+
             <div class="nav-buttons">
-                <button type="button" class="btn-secondary" onclick="prevStep()">Atrás</button>
-                <button type="button" class="btn-primary" onclick="nextStep()">Siguiente</button>
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
             </div>
         </div>
 
         <div class="step">
-            <h2>2. ¿Qué Red usaste?</h2>
-            <div class="scrollable">
-                <div class="sub-label">Pasarela General</div>
+            <h2>2. ¿Qué Red y Moneda utilizaste?</h2>
+            <p class="desc">Por favor marca la opción <strong>exacta</strong>. Esto nos ayuda a detectar errores técnicos por red.</p>
+            
+            <div class="scroll-area">
+                <div class="section-header">SI USASTE LA PASARELA GENERAL (QR)</div>
                 <div class="options-grid">
-                    <label><input type="radio" name="RedCripto" value="Ethereum ERC20"><div class="radio-card">Ethereum (ERC20)</div></label>
-                    <label><input type="radio" name="RedCripto" value="Tron TRC20"><div class="radio-card">Tron (TRC20 - USDT)</div></label>
-                    <label><input type="radio" name="RedCripto" value="Bitcoin"><div class="radio-card">Bitcoin (BTC)</div></label>
-                    <label><input type="radio" name="RedCripto" value="BSC BEP20"><div class="radio-card">BSC (BNB)</div></label>
-                    <label><input type="radio" name="RedCripto" value="Polygon"><div class="radio-card">Polygon (MATIC)</div></label>
-                    <label><input type="radio" name="RedCripto" value="Solana"><div class="radio-card">Solana (SOL)</div></label>
+                    <label><input type="radio" name="RedCripto" value="Ethereum ERC20"><div class="radio-card"><span class="card-title">Red Ethereum (ERC20)</span><span class="card-subtitle">USDT, USDC, ETH o EURT</span></div></label>
+                    <label><input type="radio" name="RedCripto" value="Tron TRC20"><div class="radio-card"><span class="card-title">Red Tron (TRC20)</span><span class="card-subtitle">Principalmente USDT en red Tron</span></div></label>
+                    <label><input type="radio" name="RedCripto" value="Bitcoin"><div class="radio-card"><span class="card-title">Red Bitcoin</span><span class="card-subtitle">BTC Nativo</span></div></label>
+                    <label><input type="radio" name="RedCripto" value="BSC BEP20"><div class="radio-card"><span class="card-title">Red Binance Smart Chain (BEP20)</span><span class="card-subtitle">BNB o tokens en BSC</span></div></label>
+                    <label><input type="radio" name="RedCripto" value="Polygon"><div class="radio-card"><span class="card-title">Red Polygon</span><span class="card-subtitle">MATIC / POL</span></div></label>
+                    <label><input type="radio" name="RedCripto" value="Solana"><div class="radio-card"><span class="card-title">Red Solana</span><span class="card-subtitle">SOL</span></div></label>
+                    <label><input type="radio" name="RedCripto" value="XRP"><div class="radio-card"><span class="card-title">Red XRP Ledger</span><span class="card-subtitle">XRP (Ripple)</span></div></label>
+                    <label><input type="radio" name="RedCripto" value="Litecoin"><div class="radio-card"><span class="card-title">Red Litecoin</span><span class="card-subtitle">LTC</span></div></label>
                 </div>
-                <div class="sub-label">Metamask</div>
+
+                <div class="section-header">SI USASTE METAMASK (WEB3)</div>
                 <div class="options-grid">
-                    <label><input type="radio" name="RedCripto" value="Metamask Ethereum"><div class="radio-card">Ethereum Mainnet</div></label>
-                    <label><input type="radio" name="RedCripto" value="Metamask BSC"><div class="radio-card">BSC Mainnet</div></label>
+                    <label><input type="radio" name="RedCripto" value="Metamask Ethereum"><div class="radio-card"><span class="card-title">Ethereum Mainnet</span><span class="card-subtitle">ETH / USDT via Metamask</span></div></label>
+                    <label><input type="radio" name="RedCripto" value="Metamask BSC"><div class="radio-card"><span class="card-title">Smart Chain / BSC</span><span class="card-subtitle">BNB via Metamask</span></div></label>
                 </div>
             </div>
+
             <div class="nav-buttons">
-                <button type="button" class="btn-secondary" onclick="prevStep()">Atrás</button>
-                <button type="button" class="btn-primary" onclick="nextStep()">Siguiente</button>
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
             </div>
         </div>
 
         <div class="step">
-            <h2>3. Dispositivo</h2>
+            <h2>3. ¿Desde qué dispositivo pagaste?</h2>
+            <p class="desc">Queremos optimizar el diseño para ese dispositivo.</p>
+            
             <div class="options-grid">
-                <label><input type="radio" name="Dispositivo" value="Desktop Extension" onclick="delayedNext()"><div class="radio-card">💻 PC + Extensión</div></label>
-                <label><input type="radio" name="Dispositivo" value="Desktop QR Movil" onclick="delayedNext()"><div class="radio-card">📱 PC + QR Móvil</div></label>
-                <label><input type="radio" name="Dispositivo" value="Movil App" onclick="delayedNext()"><div class="radio-card">📲 Móvil (App)</div></label>
+                <label>
+                    <input type="radio" name="Dispositivo" value="Desktop Extension" onclick="delayedNext()">
+                    <div class="radio-card">
+                        <span class="card-title">💻 Ordenador (Navegador)</span>
+                        <span class="card-subtitle">Pagué en el PC usando mi extensión (ej. Chrome).</span>
+                    </div>
+                </label>
+                <label>
+                    <input type="radio" name="Dispositivo" value="Desktop QR Movil" onclick="delayedNext()">
+                    <div class="radio-card">
+                        <span class="card-title">📱 Ordenador + Móvil (QR)</span>
+                        <span class="card-subtitle">Estaba en el PC, pero escaneé el QR con mi móvil.</span>
+                    </div>
+                </label>
+                <label>
+                    <input type="radio" name="Dispositivo" value="Movil App" onclick="delayedNext()">
+                    <div class="radio-card">
+                        <span class="card-title">📲 Solo Móvil</span>
+                        <span class="card-subtitle">Navegaba en el móvil y saltó a la App de mi Wallet.</span>
+                    </div>
+                </label>
             </div>
+
             <div class="nav-buttons">
-                <button type="button" class="btn-secondary" onclick="prevStep()">Atrás</button>
-                <button type="button" class="btn-primary" onclick="nextStep()">Siguiente</button>
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
             </div>
         </div>
 
         <div class="step">
-            <h2>4. ¿Fue fácil?</h2>
-            <p class="desc">Del 1 (Difícil) al 5 (Fácil).</p>
-            <div class="stars">
-                <input type="radio" id="s5" name="Puntuacion" value="5" onclick="delayedNext()"><label for="s5">★</label>
-                <input type="radio" id="s4" name="Puntuacion" value="4" onclick="delayedNext()"><label for="s4">★</label>
-                <input type="radio" id="s3" name="Puntuacion" value="3" onclick="delayedNext()"><label for="s3">★</label>
-                <input type="radio" id="s2" name="Puntuacion" value="2" onclick="delayedNext()"><label for="s2">★</label>
-                <input type="radio" id="s1" name="Puntuacion" value="1" onclick="delayedNext()"><label for="s1">★</label>
+            <h2>4. Tu Valoración General</h2>
+            <p class="desc">Del 1 al 5, ¿cómo calificarías la <strong>rapidez y facilidad</strong> del proceso?</p>
+            
+            <div class="stars-wrapper">
+                <div class="stars">
+                    <input type="radio" id="s5" name="Puntuacion" value="5" onclick="delayedNext()"><label for="s5">★</label>
+                    <input type="radio" id="s4" name="Puntuacion" value="4" onclick="delayedNext()"><label for="s4">★</label>
+                    <input type="radio" id="s3" name="Puntuacion" value="3" onclick="delayedNext()"><label for="s3">★</label>
+                    <input type="radio" id="s2" name="Puntuacion" value="2" onclick="delayedNext()"><label for="s2">★</label>
+                    <input type="radio" id="s1" name="Puntuacion" value="1" onclick="delayedNext()"><label for="s1">★</label>
+                </div>
+                <div class="stars-labels">
+                    <span>1 (Difícil / Lento)</span>
+                    <span>5 (Muy Fácil)</span>
+                </div>
             </div>
+
             <div class="nav-buttons">
-                <button type="button" class="btn-secondary" onclick="prevStep()">Atrás</button>
-                <button type="button" class="btn-primary" onclick="nextStep()">Siguiente</button>
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
             </div>
         </div>
 
         <div class="step">
             <h2>5. Comparación</h2>
+            <p class="desc">¿Has comprado tecnología con cripto en otras tiendas? ¿Cómo nos comparas?</p>
+            
             <div class="options-grid">
-                <label><input type="radio" name="Comparacion" value="Mejor aqui" onclick="delayedNext()"><div class="radio-card">🏆 Mejor aquí</div></label>
-                <label><input type="radio" name="Comparacion" value="Igual" onclick="delayedNext()"><div class="radio-card">😐 Igual / Estándar</div></label>
-                <label><input type="radio" name="Comparacion" value="Peor" onclick="delayedNext()"><div class="radio-card">👎 Peor / Difícil</div></label>
-                <label><input type="radio" name="Comparacion" value="Primera vez" onclick="delayedNext()"><div class="radio-card">🆕 Primera vez</div></label>
+                <label><input type="radio" name="Comparacion" value="Mejor aqui" onclick="delayedNext()"><div class="radio-card"><span class="card-title">🏆 Sois los mejores</span><span class="card-subtitle">Ha sido más fácil aquí que en otros sitios.</span></div></label>
+                <label><input type="radio" name="Comparacion" value="Igual" onclick="delayedNext()"><div class="radio-card"><span class="card-title">😐 Igual que el resto</span><span class="card-subtitle">Una experiencia estándar, sin sorpresas.</span></div></label>
+                <label><input type="radio" name="Comparacion" value="Peor" onclick="delayedNext()"><div class="radio-card"><span class="card-title">👎 Peor / Más complicado</span><span class="card-subtitle">En otros sitios es más sencillo pagar.</span></div></label>
+                <label><input type="radio" name="Comparacion" value="Primera vez" onclick="delayedNext()"><div class="radio-card"><span class="card-title">🆕 Es mi primera vez</span><span class="card-subtitle">Nunca antes había pagado con criptomonedas.</span></div></label>
             </div>
+
             <div class="nav-buttons">
-                <button type="button" class="btn-secondary" onclick="prevStep()">Atrás</button>
-                <button type="button" class="btn-primary" onclick="nextStep()">Siguiente</button>
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
             </div>
         </div>
 
         <div class="step">
-            <h2>6. Preferencias</h2>
-            <div class="sub-label">Futuro</div>
-            <div class="options-grid">
-                <label><input type="radio" name="PreferenciaFutura" value="Estables"><div class="radio-card">Estables (USDT...)</div></label>
-                <label><input type="radio" name="PreferenciaFutura" value="Volatiles"><div class="radio-card">Volátiles (BTC...)</div></label>
-            </div>
+            <h2>6. Futuro y Mejoras</h2>
             
-            <div class="sub-label">Mejoras</div>
-            <input type="text" name="SugerenciaRed" placeholder="¿Falta alguna red?">
-            <textarea name="Mejoras" rows="2" style="margin-top:10px;" placeholder="¿Sugerencias?"></textarea>
+            <div class="section-header" style="margin-top:0;">¿QUÉ PREFIERES GASTAR EN EL FUTURO?</div>
+            <div class="options-grid" style="margin-bottom: 20px;">
+                <label><input type="radio" name="PreferenciaFutura" value="Estables"><div class="radio-card"><span class="card-title">Monedas Estables (USDT, USDC, DAI)</span><span class="card-subtitle">Prefiero no arriesgarme a la volatilidad al pagar.</span></div></label>
+                <label><input type="radio" name="PreferenciaFutura" value="Volatiles"><div class="radio-card"><span class="card-title">Monedas Volátiles (Bitcoin, Ethereum)</span><span class="card-subtitle">Porque ya tengo muchas acumuladas (Hold).</span></div></label>
+            </div>
+
+            <label class="card-title" style="display:block; margin-bottom:5px;">¿Echas en falta alguna Red?</label>
+            <input type="text" name="SugerenciaRed" placeholder="Ej: Base, Lightning Network, Monero...">
+
+            <label class="card-title" style="display:block; margin-bottom:5px;">¿Qué mejorarías de la experiencia?</label>
+            <textarea name="Mejoras" rows="2" placeholder="Cuéntanos qué NO te gustó (comisiones altas, miedo al error...)"></textarea>
 
             <div class="nav-buttons">
-                <button type="button" class="btn-secondary" onclick="prevStep()">Atrás</button>
-                <button type="button" class="btn-primary" onclick="nextStep()">Siguiente</button>
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
             </div>
         </div>
 
         <div class="step">
-            <h2>📧 Último paso</h2>
-            <p class="desc">Tu email para enviarte el cupón.</p>
-            <input type="email" name="Email" id="inputEmail" placeholder="nombre@email.com">
+            <h2>✉️ Envío del Cupón</h2>
+            <p class="desc">¡Ya casi estamos! Escribe tu email para recibir el cupón de 5€.</p>
             
-            <button type="submit" class="btn-start-big" id="btnSubmit">ENVIAR TODO</button>
-            <button type="button" class="btn-secondary" style="margin-top:10px; border:none;" onclick="prevStep()">Atrás</button>
+            <input type="email" name="Email" id="inputEmail" placeholder="tunombre@email.com" required style="padding: 18px; font-size: 18px;">
+            
+            <button type="submit" class="btn-start-big" id="btnSubmit">ENVIAR RESPUESTAS</button>
+            
+            <button type="button" class="btn-prev" onclick="prevStep()" style="margin-top: 15px; width: 100%; border:none;">Volver atrás</button>
         </div>
 
     </form>
 
     <div id="success-screen">
-        <h1 style="font-size: 60px;">✅</h1>
-        <h2>¡Recibido!</h2>
-        <p>Gracias por tu ayuda.</p>
-        <button onclick="location.reload()" class="btn-secondary">Volver</button>
+        <h1 style="font-size: 60px; margin-bottom: 20px;">✅</h1>
+        <h2>¡Respuestas Recibidas!</h2>
+        <p class="desc" style="max-width: 400px;">Muchas gracias por tu tiempo. Hemos registrado tus respuestas correctamente.</p>
+        <p style="background: #f0fff4; color: #2e7d32; padding: 10px 20px; border-radius: 50px; font-weight: bold;">El cupón llegará a tu correo en breve.</p>
+        <button onclick="location.reload()" class="btn-prev" style="margin-top: 30px;">Volver al inicio</button>
     </div>
 
 </div>
 
 <script>
-    // ======================================================
-    // PEGA AQUÍ TU URL (No borres las comillas simples):
+    // ======================================================================
+    // 👇👇 PEGA AQUÍ TU URL DEL SCRIPT DE GOOGLE (Mantén las comillas '') 👇👇
     const scriptURL = 'https://script.google.com/a/macros/unas-holding.org/s/AKfycbw1hnZZrLd710BeOJXd__vXXc5ryIoO-6NX8MAsYSA95jCQGtpbFs_yQHw-DO_FtphuEw/exec'
-    // ======================================================
+    // ======================================================================
 
     let currentStep = 0;
     const steps = document.querySelectorAll('.step');
     const progressBar = document.getElementById('progress');
     const errorMsg = document.getElementById('errorMsg');
 
+    // Muestra el paso actual y oculta el resto
     function updateUI() {
-        // Ocultar todos
-        steps.forEach(s => s.classList.remove('active'));
-        // Mostrar actual
-        steps[currentStep].classList.add('active');
-        // Barra
+        steps.forEach((s, index) => {
+            if (index === currentStep) {
+                s.classList.add('active');
+            } else {
+                s.classList.remove('active');
+            }
+        });
+        
+        // Actualizar barra de progreso
         const progress = (currentStep / (steps.length - 1)) * 100;
         progressBar.style.width = progress + '%';
-        // Scroll arriba
-        window.scrollTo(0,0);
+        
+        // Scroll suave hacia arriba
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Navegación directa
+    // Ir a un paso específico (usado por el botón Inicio)
     function goToStep(n) {
         currentStep = n;
         updateUI();
     }
 
+    // Avanzar al siguiente paso (con validación básica)
     function nextStep() {
-        if(validateStep()) {
-            if(currentStep < steps.length - 1) {
+        if (validateStep()) {
+            if (currentStep < steps.length - 1) {
                 currentStep++;
                 updateUI();
             }
@@ -372,65 +435,81 @@
         }
     }
 
+    // Retroceder
     function prevStep() {
-        if(currentStep > 0) {
+        if (currentStep > 0) {
             currentStep--;
             updateUI();
         }
     }
 
+    // Auto-avance con pequeño retraso (para UX fluida)
     function delayedNext() {
-        setTimeout(nextStep, 300);
+        setTimeout(() => {
+            nextStep();
+        }, 350);
     }
 
-    // Validación simplificada
+    // Validar que se haya marcado algo (excepto en pasos opcionales)
     function validateStep() {
-        // Si es el paso de intro (0) o el de sugerencias (6), no valida nada
-        if(currentStep === 0 || currentStep === 6) return true;
+        // Pasos que no requieren validación estricta (Intro = 0, Texto libre = 6)
+        if (currentStep === 0 || currentStep === 6) return true;
 
         const inputs = steps[currentStep].querySelectorAll('input[type="radio"]');
-        if(inputs.length === 0) return true; // Si no hay radios, pasa
+        
+        // Si no hay radio buttons en este paso, es válido por defecto
+        if (inputs.length === 0) return true;
 
-        // Verificar si alguno está marcado
+        // Comprobar si alguno está marcado
         let isChecked = false;
-        inputs.forEach(i => { if(i.checked) isChecked = true; });
+        inputs.forEach(input => {
+            if (input.checked) isChecked = true;
+        });
+
         return isChecked;
     }
 
+    // Mostrar mensaje de error temporal
     function showError() {
         errorMsg.style.display = 'block';
-        setTimeout(() => { errorMsg.style.display = 'none'; }, 2000);
+        setTimeout(() => {
+            errorMsg.style.display = 'none';
+        }, 2500);
     }
 
-    // Envío
-    const form = document.forms['mainForm'];
+    // --- ENVÍO DEL FORMULARIO ---
+    const form = document.forms['crypto-survey'];
     const btnSubmit = document.getElementById('btnSubmit');
 
     form.addEventListener('submit', e => {
         e.preventDefault();
         
+        // Validación final de email
         const email = document.getElementById('inputEmail').value;
-        if(!email.includes('@')) {
-            alert("Por favor escribe un email válido");
+        if (!email || !email.includes('@')) {
+            alert("Por favor escribe un email válido para enviarte el cupón.");
             return;
         }
 
         btnSubmit.disabled = true;
         btnSubmit.innerText = "Enviando...";
+        btnSubmit.style.opacity = "0.7";
 
         fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(() => {
+            .then(response => {
+                // Ocultar formulario y mostrar éxito
                 form.style.display = 'none';
                 document.getElementById('success-screen').style.display = 'flex';
                 progressBar.style.width = '100%';
             })
             .catch(error => {
-                alert("Error de conexión. Inténtalo de nuevo.");
+                alert("Error de conexión. Por favor inténtalo de nuevo.");
                 btnSubmit.disabled = false;
-                btnSubmit.innerText = "Reintentar";
+                btnSubmit.innerText = "Reintentar Envío";
+                btnSubmit.style.opacity = "1";
+                console.error('Error!', error.message);
             });
     });
-
 </script>
 
 </body>
