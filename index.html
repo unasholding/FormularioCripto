@@ -3,136 +3,466 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Encuesta de Pago Cripto</title>
+    <title>Encuesta Cripto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; color: #333; line-height: 1.6; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #2c3e50; }
-        h3 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 30px; color: #0056b3; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; }
-        .option-group { margin-bottom: 15px; padding-left: 10px; }
-        .option-group label { font-weight: normal; cursor: pointer; }
-        input[type="text"], input[type="email"], textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
-        button:hover { background-color: #218838; }
-        .sub-title { font-size: 0.9em; color: #666; margin-top: 10px; font-style: italic; }
-        #mensaje { text-align: center; margin-top: 20px; font-weight: bold; display: none; }
+        :root {
+            --primary: #FF6600; /* Naranja Bitcoin */
+            --primary-light: #fff0e5;
+            --text: #333;
+            --gray: #888;
+            --bg: #fafafa;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Barra de Progreso */
+        .progress-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: #eee;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* Slides (Pasos) */
+        .step {
+            display: none; /* Ocultos por defecto */
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
+            animation: fadeIn 0.5s ease;
+        }
+        .step.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+        
+        .desc {
+            font-size: 16px;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        /* Inputs y Opciones Estilo Tarjeta */
+        .options-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .radio-card {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .radio-card:hover {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        /* Ocultar el radio button real */
+        input[type="radio"] {
+            display: none;
+        }
+
+        /* Estilo cuando está seleccionado */
+        input[type="radio"]:checked + .radio-card {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(255, 102, 0, 0.15);
+        }
+
+        /* Inputs de texto */
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            box-sizing: border-box;
+            outline: none;
+            transition: border 0.3s;
+        }
+        input:focus, textarea:focus {
+            border-color: var(--primary);
+        }
+
+        /* Navegación */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 30px;
+        }
+
+        button {
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:active { transform: scale(0.98); }
+
+        .btn-next {
+            background-color: var(--text);
+            color: white;
+            margin-left: auto; /* Empuja a la derecha */
+        }
+        .btn-next:hover { background-color: black; }
+
+        .btn-prev {
+            background-color: white;
+            color: var(--gray);
+            border: 1px solid #eee;
+        }
+        .btn-prev:hover { background-color: #f5f5f5; color: var(--text); }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: white;
+            width: 100%;
+        }
+        .btn-submit:hover { background-color: #e65c00; }
+
+        /* Subtitulos dentro de opciones */
+        .group-label {
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray);
+            margin: 20px 0 10px 0;
+            font-weight: bold;
+        }
+
+        /* Estrellas */
+        .stars {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            gap: 10px;
+        }
+        .stars input { display: none; }
+        .stars label {
+            font-size: 40px;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .stars input:checked ~ label,
+        .stars label:hover,
+        .stars label:hover ~ label {
+            color: #FFD700;
+        }
+
+        /* Mensajes de error/exito */
+        .error-msg { color: red; font-size: 14px; margin-top: 10px; display: none; }
+        #success-screen { text-align: center; display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+        #success-icon { font-size: 60px; color: var(--primary); margin-bottom: 20px; }
+
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Encuesta de Experiencia</h1>
-    <p>Ayúdanos a mejorar y recibe tu cupón de 5€.</p>
+    <div class="progress-container"><div class="progress-bar" id="progress"></div></div>
 
-    <form name="crypto-survey">
+    <form name="crypto-survey" id="mainForm">
         
-        <h3>I. Sobre tu Pago</h3>
-
-        <label>1. ¿Qué método de pago seleccionaste?</label>
-        <div class="option-group">
-            <label><input type="radio" name="MetodoPago" value="Metamask (Web3)" required> Botón Metamask (Conexión directa Web3)</label><br>
-            <label><input type="radio" name="MetodoPago" value="Pasarela Estándar/QR"> Botón "Pague con Criptomonedas" (Pasarela estándar / QR)</label>
+        <div class="step active">
+            <div style="text-align: center;">
+                <h1 style="color: var(--primary); font-size: 40px;">₿</h1>
+                <h2>Encuesta de Experiencia</h2>
+                <p class="desc">Ayúdanos a mejorar en menos de 1 minuto y recibe tu <strong>cupón de 5€</strong>.</p>
+                <button type="button" class="btn-next" onclick="nextStep()">Comenzar →</button>
+            </div>
         </div>
 
-        <label>2. ¿Qué Red y Criptomoneda utilizaste?</label>
-        <div class="option-group">
-            <div class="sub-title">Si usaste la Pasarela General:</div>
-            <label><input type="radio" name="RedCripto" value="Ethereum ERC20" required> Red Ethereum (ERC20)</label><br>
-            <label><input type="radio" name="RedCripto" value="Tron TRC20"> Red Tron (TRC20) - USDT</label><br>
-            <label><input type="radio" name="RedCripto" value="Bitcoin"> Red Bitcoin - BTC</label><br>
-            <label><input type="radio" name="RedCripto" value="BSC BEP20"> Red Binance Smart Chain (BEP20)</label><br>
-            <label><input type="radio" name="RedCripto" value="Polygon"> Red Polygon - MATIC</label><br>
-            <label><input type="radio" name="RedCripto" value="Solana"> Red Solana - SOL</label><br>
-            <label><input type="radio" name="RedCripto" value="XRP"> Red XRP Ledger - XRP</label><br>
-            <label><input type="radio" name="RedCripto" value="Litecoin"> Red Litecoin - LTC</label><br>
-
-            <div class="sub-title">Si usaste Metamask:</div>
-            <label><input type="radio" name="RedCripto" value="Metamask Ethereum"> Red Ethereum Mainnet (ETH / USDT)</label><br>
-            <label><input type="radio" name="RedCripto" value="Metamask BSC"> Red Smart Chain / BSC (BNB)</label>
+        <div class="step">
+            <h2>1. ¿Cómo pagaste?</h2>
+            <p class="desc">Selecciona el método que usaste.</p>
+            <div class="options-grid">
+                <label>
+                    <input type="radio" name="MetodoPago" value="Metamask (Web3)" required onclick="autoAdvance()">
+                    <div class="radio-card">🦊 Botón Metamask (Web3 Directo)</div>
+                </label>
+                <label>
+                    <input type="radio" name="MetodoPago" value="Pasarela Estándar/QR" onclick="autoAdvance()">
+                    <div class="radio-card">💳 Pasarela Cripto / Código QR</div>
+                </label>
+            </div>
+            <div class="error-msg">Por favor selecciona una opción.</div>
+            <div class="nav-buttons">
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
+            </div>
         </div>
 
-        <label>3. ¿Desde qué dispositivo realizaste el pago?</label>
-        <div class="option-group">
-            <label><input type="radio" name="Dispositivo" value="Desktop Extension" required> Ordenador (Extensión navegador)</label><br>
-            <label><input type="radio" name="Dispositivo" value="Desktop QR Movil"> Ordenador (Escaneando QR con móvil)</label><br>
-            <label><input type="radio" name="Dispositivo" value="Movil App"> Móvil (Saltando a App Wallet)</label>
+        <div class="step">
+            <h2>2. ¿Qué Red usaste?</h2>
+            <p class="desc">Es importante para saber dónde mejorar.</p>
+            
+            <div style="max-height: 300px; overflow-y: auto; padding-right: 5px;">
+                <div class="group-label">Si usaste Pasarela</div>
+                <div class="options-grid">
+                    <label><input type="radio" name="RedCripto" value="Ethereum ERC20"><div class="radio-card">Ethereum (ERC20)</div></label>
+                    <label><input type="radio" name="RedCripto" value="Tron TRC20"><div class="radio-card">Tron (TRC20 - USDT)</div></label>
+                    <label><input type="radio" name="RedCripto" value="Bitcoin"><div class="radio-card">Bitcoin (BTC)</div></label>
+                    <label><input type="radio" name="RedCripto" value="BSC BEP20"><div class="radio-card">Binance Smart Chain (BNB)</div></label>
+                    <label><input type="radio" name="RedCripto" value="Polygon"><div class="radio-card">Polygon (MATIC)</div></label>
+                    <label><input type="radio" name="RedCripto" value="Solana"><div class="radio-card">Solana (SOL)</div></label>
+                </div>
+
+                <div class="group-label">Si usaste Metamask</div>
+                <div class="options-grid">
+                    <label><input type="radio" name="RedCripto" value="Metamask Ethereum"><div class="radio-card">Ethereum Mainnet</div></label>
+                    <label><input type="radio" name="RedCripto" value="Metamask BSC"><div class="radio-card">BSC Mainnet</div></label>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
+            </div>
         </div>
 
-        <h3>II. Tu Valoración</h3>
-
-        <label>4. Rapidez y facilidad (1 = Lento, 5 = Rápido)</label>
-        <div class="option-group">
-            <label><input type="radio" name="Puntuacion" value="1" required> ⭐ 1</label> 
-            <label><input type="radio" name="Puntuacion" value="2"> 2</label> 
-            <label><input type="radio" name="Puntuacion" value="3"> 3</label> 
-            <label><input type="radio" name="Puntuacion" value="4"> 4</label> 
-            <label><input type="radio" name="Puntuacion" value="5"> ⭐⭐⭐⭐⭐ 5</label>
+        <div class="step">
+            <h2>3. Tu Dispositivo</h2>
+            <div class="options-grid">
+                <label><input type="radio" name="Dispositivo" value="Desktop Extension" onclick="autoAdvance()"><div class="radio-card">💻 PC + Extensión Navegador</div></label>
+                <label><input type="radio" name="Dispositivo" value="Desktop QR Movil" onclick="autoAdvance()"><div class="radio-card">📱 PC + Escáner QR con Móvil</div></label>
+                <label><input type="radio" name="Dispositivo" value="Movil App" onclick="autoAdvance()"><div class="radio-card">📲 Móvil (App Wallet)</div></label>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
+            </div>
         </div>
 
-        <label>5. Comparación con otras tiendas</label>
-        <div class="option-group">
-            <label><input type="radio" name="Comparacion" value="Mejor aqui" required> Sois los mejores / Ha sido más fácil aquí</label><br>
-            <label><input type="radio" name="Comparacion" value="Igual"> Igual que el resto</label><br>
-            <label><input type="radio" name="Comparacion" value="Peor"> Peor / Más complicado</label><br>
-            <label><input type="radio" name="Comparacion" value="Primera vez"> No, es mi primera vez pagando con cripto</label>
+        <div class="step">
+            <h2>4. ¿Qué tan fácil fue?</h2>
+            <p class="desc">Del 1 (Difícil) al 5 (Muy fácil)</p>
+            
+            <div class="stars">
+                <input type="radio" id="s5" name="Puntuacion" value="5" onclick="autoAdvanceDelay()"><label for="s5">★</label>
+                <input type="radio" id="s4" name="Puntuacion" value="4" onclick="autoAdvanceDelay()"><label for="s4">★</label>
+                <input type="radio" id="s3" name="Puntuacion" value="3" onclick="autoAdvanceDelay()"><label for="s3">★</label>
+                <input type="radio" id="s2" name="Puntuacion" value="2" onclick="autoAdvanceDelay()"><label for="s2">★</label>
+                <input type="radio" id="s1" name="Puntuacion" value="1" onclick="autoAdvanceDelay()"><label for="s1">★</label>
+            </div>
+
+            <div class="nav-buttons">
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
+            </div>
         </div>
 
-        <h3>III. Preferencias y Futuro</h3>
-
-        <label>6. ¿Qué moneda prefieres gastar en el futuro?</label>
-        <div class="option-group">
-            <label><input type="radio" name="PreferenciaFutura" value="Estables" required> Monedas estables (USDT, USDC...) para evitar volatilidad</label><br>
-            <label><input type="radio" name="PreferenciaFutura" value="Volatiles"> Monedas volátiles (BTC, ETH...) porque tengo acumuladas</label>
+        <div class="step">
+            <h2>5. Comparado con otros...</h2>
+            <div class="options-grid">
+                <label><input type="radio" name="Comparacion" value="Mejor aqui" onclick="autoAdvance()"><div class="radio-card">🏆 Sois los mejores / Más fácil</div></label>
+                <label><input type="radio" name="Comparacion" value="Igual" onclick="autoAdvance()"><div class="radio-card">😐 Igual que el resto</div></label>
+                <label><input type="radio" name="Comparacion" value="Peor" onclick="autoAdvance()"><div class="radio-card">👎 Peor / Más complicado</div></label>
+                <label><input type="radio" name="Comparacion" value="Primera vez" onclick="autoAdvance()"><div class="radio-card">🆕 Es mi primera vez con cripto</div></label>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
+            </div>
         </div>
 
-        <label>7. ¿Echas en falta alguna Red o Moneda?</label>
-        <input type="text" name="SugerenciaRed" placeholder="Ej: Base, Lightning Network...">
+        <div class="step">
+            <h2>6. Preferencias y Mejoras</h2>
+            <p class="desc">¿Qué moneda prefieres gastar?</p>
+            <div class="options-grid" style="margin-bottom: 20px;">
+                <label><input type="radio" name="PreferenciaFutura" value="Estables"><div class="radio-card">Estables (USDT, USDC...)</div></label>
+                <label><input type="radio" name="PreferenciaFutura" value="Volatiles"><div class="radio-card">Volátiles (BTC, ETH...)</div></label>
+            </div>
 
-        <label>8. ¿Qué mejorarías de la experiencia?</label>
-        <textarea name="Mejoras" rows="3" placeholder="Comisiones, miedo al error..."></textarea>
+            <label>¿Falta alguna red?</label>
+            <input type="text" name="SugerenciaRed" placeholder="Ej: Base, Lightning Network...">
+            
+            <br><br>
+            <label>¿Qué podemos mejorar?</label>
+            <textarea name="Mejoras" rows="2" placeholder="Tus sugerencias..."></textarea>
 
-        <label>9. Email para recibir tu cupón de 5€:</label>
-        <input type="email" name="Email" placeholder="tu@email.com" required>
+            <div class="nav-buttons">
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep()">Siguiente</button>
+            </div>
+        </div>
 
-        <button type="submit">Enviar Respuestas</button>
-        <div id="mensaje"></div>
+        <div class="step">
+            <h2>¡Último paso!</h2>
+            <p class="desc">Déjanos tu email para enviarte el cupón de 5€.</p>
+            
+            <input type="email" name="Email" id="inputEmail" placeholder="nombre@ejemplo.com" required>
+            
+            <div style="margin-top: 30px;">
+                <button type="submit" class="btn-submit">FINALIZAR Y ENVIAR</button>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn-prev" onclick="prevStep()">Atrás</button>
+            </div>
+        </div>
+
     </form>
+
+    <div id="success-screen">
+        <div id="success-icon">✅</div>
+        <h2>¡Recibido!</h2>
+        <p>Tus respuestas se han guardado correctamente.</p>
+        <p>Revisa tu correo pronto para ver tu cupón.</p>
+        <button onclick="location.reload()" style="margin-top:20px; background: #eee; color: #333;">Volver a inicio</button>
+    </div>
+
 </div>
 
 <script>
     // -----------------------------------------------------------------------
-    // PEGA AQUÍ ABAJO LA URL DE TU SCRIPT DE GOOGLE (Consérva las comillas simple ' ')
+    // PEGA AQUÍ ABAJO LA URL DE TU SCRIPT DE GOOGLE
     const scriptURL = https://script.google.com/a/macros/unas-holding.org/s/AKfycbw1hnZZrLd710BeOJXd__vXXc5ryIoO-6NX8MAsYSA95jCQGtpbFs_yQHw-DO_FtphuEw/exec
     // -----------------------------------------------------------------------
 
-    const form = document.forms['crypto-survey']
-    const mensajeDiv = document.getElementById('mensaje')
-    const btn = form.querySelector('button')
+    let currentStep = 0;
+    const steps = document.querySelectorAll('.step');
+    const progressBar = document.getElementById('progress');
+
+    function showStep(n) {
+        // Reset
+        steps.forEach(s => s.classList.remove('active'));
+        // Show current
+        steps[n].classList.add('active');
+        // Update Progress
+        const progress = ((n) / (steps.length - 1)) * 100;
+        progressBar.style.width = progress + '%';
+    }
+
+    function nextStep() {
+        // Validación simple (opcional: añadir validación más estricta si se desea)
+        const inputs = steps[currentStep].querySelectorAll('input[required]');
+        let valid = true;
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                valid = false;
+                input.reportValidity();
+            }
+        });
+
+        // Caso especial para grupos de radio buttons requeridos
+        // (El navegador a veces no valida radio groups ocultos correctamente, 
+        // pero como están visibles, checkValidity suele funcionar. 
+        // Si no, forzamos validación visual).
+
+        if (valid && currentStep < steps.length - 1) {
+            currentStep++;
+            showStep(currentStep);
+        }
+    }
+
+    function prevStep() {
+        if (currentStep > 0) {
+            currentStep--;
+            showStep(currentStep);
+        }
+    }
+
+    // Auto-avanzar cuando seleccionan una opción (Typeform style)
+    function autoAdvance() {
+        setTimeout(() => {
+            nextStep();
+        }, 300); // Pequeño delay para que vean la animación de click
+    }
+
+    function autoAdvanceDelay() {
+        setTimeout(() => {
+            nextStep();
+        }, 500); // Un poco más de tiempo para las estrellas
+    }
+
+    // ENVIO DEL FORMULARIO
+    const form = document.forms['mainForm'];
+    const successScreen = document.getElementById('success-screen');
+    const submitBtn = document.querySelector('.btn-submit');
 
     form.addEventListener('submit', e => {
-        e.preventDefault()
-        btn.disabled = true
-        btn.innerText = "Enviando..."
+        e.preventDefault();
+        
+        // Validar email final
+        const emailInput = document.getElementById('inputEmail');
+        if(!emailInput.value) {
+            alert("Por favor escribe tu email");
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Enviando...";
 
         fetch(scriptURL, { method: 'POST', body: new FormData(form)})
             .then(response => {
-                mensajeDiv.style.display = "block"
-                mensajeDiv.style.color = "green"
-                mensajeDiv.innerText = "¡Recibido! Te enviaremos el cupón pronto."
-                form.reset()
-                btn.disabled = false
-                btn.innerText = "Enviar Respuestas"
+                form.style.display = 'none';
+                successScreen.style.display = 'flex';
+                progressBar.style.width = '100%';
             })
             .catch(error => {
-                mensajeDiv.style.display = "block"
-                mensajeDiv.style.color = "red"
-                mensajeDiv.innerText = "Error al enviar. Inténtalo de nuevo."
-                console.error('Error!', error.message)
-                btn.disabled = false
-                btn.innerText = "Enviar Respuestas"
-            })
-    })
+                alert("Hubo un error. Por favor intenta de nuevo.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "INTENTAR DE NUEVO";
+                console.error('Error!', error.message);
+            });
+    });
+
 </script>
 
 </body>
