@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encuesta de Pago Cripto</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; color: #333; line-height: 1.6; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; }
+        h3 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 30px; color: #0056b3; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        .option-group { margin-bottom: 15px; padding-left: 10px; }
+        .option-group label { font-weight: normal; cursor: pointer; }
+        input[type="text"], input[type="email"], textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        .sub-title { font-size: 0.9em; color: #666; margin-top: 10px; font-style: italic; }
+        #mensaje { text-align: center; margin-top: 20px; font-weight: bold; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Encuesta de Experiencia</h1>
+    <p>Ayúdanos a mejorar y recibe tu cupón de 5€.</p>
+
+    <form name="crypto-survey">
+        
+        <h3>I. Sobre tu Pago</h3>
+
+        <label>1. ¿Qué método de pago seleccionaste?</label>
+        <div class="option-group">
+            <label><input type="radio" name="MetodoPago" value="Metamask (Web3)" required> Botón Metamask (Conexión directa Web3)</label><br>
+            <label><input type="radio" name="MetodoPago" value="Pasarela Estándar/QR"> Botón "Pague con Criptomonedas" (Pasarela estándar / QR)</label>
+        </div>
+
+        <label>2. ¿Qué Red y Criptomoneda utilizaste?</label>
+        <div class="option-group">
+            <div class="sub-title">Si usaste la Pasarela General:</div>
+            <label><input type="radio" name="RedCripto" value="Ethereum ERC20" required> Red Ethereum (ERC20)</label><br>
+            <label><input type="radio" name="RedCripto" value="Tron TRC20"> Red Tron (TRC20) - USDT</label><br>
+            <label><input type="radio" name="RedCripto" value="Bitcoin"> Red Bitcoin - BTC</label><br>
+            <label><input type="radio" name="RedCripto" value="BSC BEP20"> Red Binance Smart Chain (BEP20)</label><br>
+            <label><input type="radio" name="RedCripto" value="Polygon"> Red Polygon - MATIC</label><br>
+            <label><input type="radio" name="RedCripto" value="Solana"> Red Solana - SOL</label><br>
+            <label><input type="radio" name="RedCripto" value="XRP"> Red XRP Ledger - XRP</label><br>
+            <label><input type="radio" name="RedCripto" value="Litecoin"> Red Litecoin - LTC</label><br>
+
+            <div class="sub-title">Si usaste Metamask:</div>
+            <label><input type="radio" name="RedCripto" value="Metamask Ethereum"> Red Ethereum Mainnet (ETH / USDT)</label><br>
+            <label><input type="radio" name="RedCripto" value="Metamask BSC"> Red Smart Chain / BSC (BNB)</label>
+        </div>
+
+        <label>3. ¿Desde qué dispositivo realizaste el pago?</label>
+        <div class="option-group">
+            <label><input type="radio" name="Dispositivo" value="Desktop Extension" required> Ordenador (Extensión navegador)</label><br>
+            <label><input type="radio" name="Dispositivo" value="Desktop QR Movil"> Ordenador (Escaneando QR con móvil)</label><br>
+            <label><input type="radio" name="Dispositivo" value="Movil App"> Móvil (Saltando a App Wallet)</label>
+        </div>
+
+        <h3>II. Tu Valoración</h3>
+
+        <label>4. Rapidez y facilidad (1 = Lento, 5 = Rápido)</label>
+        <div class="option-group">
+            <label><input type="radio" name="Puntuacion" value="1" required> ⭐ 1</label> 
+            <label><input type="radio" name="Puntuacion" value="2"> 2</label> 
+            <label><input type="radio" name="Puntuacion" value="3"> 3</label> 
+            <label><input type="radio" name="Puntuacion" value="4"> 4</label> 
+            <label><input type="radio" name="Puntuacion" value="5"> ⭐⭐⭐⭐⭐ 5</label>
+        </div>
+
+        <label>5. Comparación con otras tiendas</label>
+        <div class="option-group">
+            <label><input type="radio" name="Comparacion" value="Mejor aqui" required> Sois los mejores / Ha sido más fácil aquí</label><br>
+            <label><input type="radio" name="Comparacion" value="Igual"> Igual que el resto</label><br>
+            <label><input type="radio" name="Comparacion" value="Peor"> Peor / Más complicado</label><br>
+            <label><input type="radio" name="Comparacion" value="Primera vez"> No, es mi primera vez pagando con cripto</label>
+        </div>
+
+        <h3>III. Preferencias y Futuro</h3>
+
+        <label>6. ¿Qué moneda prefieres gastar en el futuro?</label>
+        <div class="option-group">
+            <label><input type="radio" name="PreferenciaFutura" value="Estables" required> Monedas estables (USDT, USDC...) para evitar volatilidad</label><br>
+            <label><input type="radio" name="PreferenciaFutura" value="Volatiles"> Monedas volátiles (BTC, ETH...) porque tengo acumuladas</label>
+        </div>
+
+        <label>7. ¿Echas en falta alguna Red o Moneda?</label>
+        <input type="text" name="SugerenciaRed" placeholder="Ej: Base, Lightning Network...">
+
+        <label>8. ¿Qué mejorarías de la experiencia?</label>
+        <textarea name="Mejoras" rows="3" placeholder="Comisiones, miedo al error..."></textarea>
+
+        <label>9. Email para recibir tu cupón de 5€:</label>
+        <input type="email" name="Email" placeholder="tu@email.com" required>
+
+        <button type="submit">Enviar Respuestas</button>
+        <div id="mensaje"></div>
+    </form>
+</div>
+
+<script>
+    // -----------------------------------------------------------------------
+    // PEGA AQUÍ ABAJO LA URL DE TU SCRIPT DE GOOGLE (Consérva las comillas simple ' ')
+    const scriptURL = https://script.google.com/a/macros/unas-holding.org/s/AKfycbw1hnZZrLd710BeOJXd__vXXc5ryIoO-6NX8MAsYSA95jCQGtpbFs_yQHw-DO_FtphuEw/exec
+    // -----------------------------------------------------------------------
+
+    const form = document.forms['crypto-survey']
+    const mensajeDiv = document.getElementById('mensaje')
+    const btn = form.querySelector('button')
+
+    form.addEventListener('submit', e => {
+        e.preventDefault()
+        btn.disabled = true
+        btn.innerText = "Enviando..."
+
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => {
+                mensajeDiv.style.display = "block"
+                mensajeDiv.style.color = "green"
+                mensajeDiv.innerText = "¡Recibido! Te enviaremos el cupón pronto."
+                form.reset()
+                btn.disabled = false
+                btn.innerText = "Enviar Respuestas"
+            })
+            .catch(error => {
+                mensajeDiv.style.display = "block"
+                mensajeDiv.style.color = "red"
+                mensajeDiv.innerText = "Error al enviar. Inténtalo de nuevo."
+                console.error('Error!', error.message)
+                btn.disabled = false
+                btn.innerText = "Enviar Respuestas"
+            })
+    })
+</script>
+
+</body>
+</html>
